@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { api } from '../lib/api'
+import { ensureSession } from '../lib/auth'
 import type { Group, Item } from '../types'
 
 /** Loads groups & items from Supabase and exposes CRUD actions. */
@@ -20,6 +21,7 @@ export function useData() {
 
   useEffect(() => {
     run(async () => {
+      await ensureSession()
       const [g, i] = await Promise.all([api.listGroups(), api.listItems()])
       setGroups(g)
       setItems(i)
